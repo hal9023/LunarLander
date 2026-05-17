@@ -3,10 +3,11 @@
 #ifndef MENU_H
 #define MENU_H
 
+#include <stdlib.h>
+#include <stdio.h>
 #include "raylib.h"
 #include "resource_dir.h"
 #include "shared.h"
-#include <stdlib.h>
 #include "button.h"
 
 typedef struct MENU {

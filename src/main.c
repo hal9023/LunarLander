@@ -17,13 +17,33 @@ void clearTerminal(void) {
 }
 
 void selectScene(bool status, SCENE sceneL) {
+	static SCENE lastScene = MENU_SCENE;
+	static bool initialized = false;
+
+	if (!initialized || sceneL != lastScene) {
+		switch (sceneL) {
+			case MENU_SCENE:
+				initMenu();
+				break;
+			case GAMEPLAY_SCENE:
+				initGameplay();
+				break;
+			case LEVEL_SELECTOR:
+				break;
+			case SETTINGS:
+				break;
+			case ENDING_SCENE:
+				break;
+		}
+		initialized = true;
+		lastScene = sceneL;
+	}
+
 	switch (sceneL) {
 		case MENU_SCENE:
-			if (!status) {
-				initMenu();
-			}
 			updateMenu();
 			drawMenu();
+			if (scene != MENU_SCENE) unloadMenu();
 			break;
 		case LEVEL_SELECTOR:
 			// Include "Running" check here for init function
@@ -32,11 +52,9 @@ void selectScene(bool status, SCENE sceneL) {
 			// Include "Running" check here for init function
 			break; 
 		case GAMEPLAY_SCENE:
-			if(!status) {
-				initGameplay();
-			}
 			updateGameplay();
 			drawGameplay();
+			if (scene != GAMEPLAY_SCENE) unloadGameplay();
 			break;
 		case ENDING_SCENE:
 			// Include "Running" check here for init function

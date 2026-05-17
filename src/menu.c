@@ -11,14 +11,23 @@ static BUTTON quitButton = { .buttonAction = false, .buttonState = NORMAL };
 #define BUTTON_Y 100 // how far down the button should be 
 #define WINDOW_X 300
 #define WINDOW_Y 400
+#define BUTTON_X (WINDOW_X / 2)
 
 void initMenu(void) { // Add Title text
     InitWindow(WINDOW_X, WINDOW_Y, "Main Menu");
-    playButton.sprite = LoadTexture("button.png");
+    playButton.sprite = LoadTexture("playbutton.png");
+    settingsButton.sprite = LoadTexture("settingsbutton.png");
+    quitButton.sprite = LoadTexture("quitbutton.png");
+
     playButton.frames = 3;
+    settingsButton.frames = 3;
+    quitButton.frames = 3;
 }
 void updateMenu(void) {
     // Menu Navigation Handler
+
+    printf("Play Button State: %d\n", playButton.buttonState);
+    printf("Selected Button: %d\n", selectedButton);
 
     playButton.buttonAction = false;
     settingsButton.buttonAction = false;
@@ -26,12 +35,8 @@ void updateMenu(void) {
 
     // Button Navigation
 
-    if (IsKeyPressed(KEY_UP || KEY_W)) {
-        selectedButton --;
-    }
-    if (IsKeyPressed(KEY_DOWN || KEY_W)) {
-        selectedButton ++;
-    }
+    if (IsKeyPressed(KEY_W)) selectedButton --;
+    if (IsKeyPressed(KEY_S)) selectedButton ++;
 
     // Button Highlighting Handler
 
@@ -41,11 +46,14 @@ void updateMenu(void) {
 
     if (selectedButton == SETTINGS_BUTTON) {
         settingsButton.buttonState = 1;
-    } else playButton.buttonState = 0;
+    } else settingsButton.buttonState = 0;
 
     if (selectedButton == QUIT_BUTTON) {
         quitButton.buttonState = 1;
     } else quitButton.buttonState = 0;
+
+    if ((int)selectedButton < PLAY_BUTTON) selectedButton = QUIT_BUTTON;
+    if ((int)selectedButton > QUIT_BUTTON) selectedButton = PLAY_BUTTON;
 
     // Button Press Handler
 
@@ -53,7 +61,7 @@ void updateMenu(void) {
         switch (selectedButton) {
             case PLAY_BUTTON:
                 playButton.buttonAction = true;
-                scene = LEVEL_SELECTOR;
+                scene = GAMEPLAY_SCENE;
                 break;
             case SETTINGS_BUTTON:
                 settingsButton.buttonAction = true;
@@ -67,9 +75,17 @@ void updateMenu(void) {
     }
 }
 void drawMenu(void) {
-    DrawText("Text", WINDOW_X/2, WINDOW_Y-20, 20, RED);
-    createButton(&playButton, WINDOW_X, WINDOW_Y, playButton.buttonState);
+    float frameHeight = (float)playButton.sprite.height / playButton.frames;
+    int buttonHeight = (int)frameHeight;
+    const char *titleText = "Lunar Lander";
+
+    DrawText(titleText, BUTTON_X - MeasureText(titleText, 20) / 2, 20, 20, RED);
+    createButton(&playButton, BUTTON_X, BUTTON_Y, playButton.buttonState);
+    createButton(&settingsButton, BUTTON_X, BUTTON_Y + (buttonHeight + BUTTON_SPACING), settingsButton.buttonState);
+    createButton(&quitButton, BUTTON_X, BUTTON_Y + 2*(buttonHeight + BUTTON_SPACING), quitButton.buttonState);
 }
 void unloadMenu(void) {
-
+    UnloadTexture(playButton.sprite);
+    UnloadTexture(settingsButton.sprite);
+    UnloadTexture(quitButton.sprite);
 }

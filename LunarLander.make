@@ -118,8 +118,18 @@ endif
 GENERATED :=
 OBJECTS :=
 
+GENERATED += $(OBJDIR)/button.o
+GENERATED += $(OBJDIR)/endscreen.o
+GENERATED += $(OBJDIR)/gameplay.o
+GENERATED += $(OBJDIR)/levelSelect,.o
 GENERATED += $(OBJDIR)/main.o
+GENERATED += $(OBJDIR)/menu.o
+OBJECTS += $(OBJDIR)/button.o
+OBJECTS += $(OBJDIR)/endscreen.o
+OBJECTS += $(OBJDIR)/gameplay.o
+OBJECTS += $(OBJDIR)/levelSelect,.o
 OBJECTS += $(OBJDIR)/main.o
+OBJECTS += $(OBJDIR)/menu.o
 
 # Rules
 # #############################################
@@ -183,7 +193,22 @@ endif
 # File Rules
 # #############################################
 
+$(OBJDIR)/button.o: src/button.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/endscreen.o: src/endscreen.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/gameplay.o: src/gameplay.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/levelSelect,.o: src/levelSelect,.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/main.o: src/main.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/menu.o: src/menu.c
 	@echo "$(notdir $<)"
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 

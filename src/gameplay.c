@@ -10,7 +10,7 @@ static LANDER player = { 0 };
 
 
 void initGameplay(void) {
-    InitWindow(800, 600, "Lunar Lander");
+    SetWindowSize(800, 600);
 
     player.position = (Vector2){ (GetScreenWidth() / 2), (GetScreenHeight() / 2) };
     player.velocity = (Vector2){ 0, 0};
@@ -88,11 +88,13 @@ void updateGameplay(void) {
     if (player.throttle >= 100) {
         player.throttle = 100;
     }
-
+    if (IsWindowResized) SetWindowSize(800, 600);
     // Debug Prints
     printf("X Velocity: %f\n", player.velocity.x);
     printf("Y Velocity: %f\n", player.velocity.y);
     printf("Throttle: %f\n", player.throttle);
+    printf("X Position: %f\n", player.position.x);
+    printf("Y Position: %f\n", player.position.y);
 }
 void drawGameplay(void) {
     ClearBackground(BLACK);
@@ -113,4 +115,6 @@ void unloadGameplay(void) { // Add an input handler for "Escape" Key to tirgger 
     player.position = (Vector2){ 0, 0};
     player.velocity = (Vector2){ 0, 0};
     player.rotation = 0.0f;
+
+    CloseWindow();
 }
