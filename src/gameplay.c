@@ -1,13 +1,17 @@
 #include "gameplay.h"
+#include <stdio.h>
 
-#define thrustPower 0.015f
-#define throttleRate 3
-#define rotationRate 0.7f
+#define GRAVITY_ACCEL 0.075f
+#define THRUST_FACTOR 2.0f
+#define TROTTLE_RATE 5
+#define ROTATION_RATE 1.0f
 
-static Lander player = { 0 };
+static LANDER player = { 0 };
 
 
 void initGameplay(void) {
+    InitWindow(800, 600, "Lunar Lander");
+
     player.position = (Vector2){ (GetScreenWidth() / 2), (GetScreenHeight() / 2) };
     player.velocity = (Vector2){ 0, 0};
     player.fuel = 100;
@@ -21,17 +25,19 @@ void initGameplay(void) {
 void updateGameplay(void) {
     // Player Input
     if (IsKeyDown(KEY_A)) {
-        player.rotation -= rotationRate;
+        player.rotation -= ROTATION_RATE;
+        printf("Rotating Left\n");
     }   
     if (IsKeyDown(KEY_D)) {
-        player.rotation += rotationRate;
+        player.rotation += ROTATION_RATE;
+        printf("Rotating Right\n");
     }   
     if (player.rotation > 359) player.rotation = 0;
     if (player.rotation < 0) player.rotation = 359;
     if (IsKeyDown(KEY_W)) {
-        player.throttle += throttleRate;
+        player.throttle += TROTTLE_RATE;
     }
-    if (!IsKeyDown(KEY_W)) { player.throttle -= throttleRate;}
+    if (!IsKeyDown(KEY_W)) { player.throttle -= TROTTLE_RATE;}
 
 
     Vector2 currentThrust = { 0, 0};
@@ -41,11 +47,11 @@ void updateGameplay(void) {
             sinf(player.rotation * DEG2RAD),
             -cosf(player.rotation * DEG2RAD)
         };
-        currentThrust= Vector2Scale(dir, thrustPower * player.throttle); // This could be a problem child idk
-
+        float thrustMagnitude = GRAVITY_ACCEL * THRUST_FACTOR * (player.throttle / 100.0f);
+        currentThrust = Vector2Scale(dir, thrustMagnitude);
     }
 
-    Vector2 gravity = { 0, 0.01f};
+    Vector2 gravity = { 0, GRAVITY_ACCEL };
 
     player.velocity = Vector2Add(player.velocity, currentThrust);
     player.velocity = Vector2Add(player.velocity, gravity);
@@ -75,6 +81,18 @@ void updateGameplay(void) {
         player.position.y = minY;
         player.velocity.y = 0;
     }
+    // Throttle Boundaries
+    if (player.throttle < 0) {
+        player.throttle = 0;
+    }
+    if (player.throttle >= 100) {
+        player.throttle = 100;
+    }
+
+    // Debug Prints
+    printf("X Velocity: %f\n", player.velocity.x);
+    printf("Y Velocity: %f\n", player.velocity.y);
+    printf("Throttle: %f\n", player.throttle);
 }
 void drawGameplay(void) {
     ClearBackground(BLACK);
@@ -87,7 +105,7 @@ void drawGameplay(void) {
 
     // Later to implement UI for this "scene"
 }
-void unloadGameplay(void) {
+void unloadGameplay(void) { // Add an input handler for "Escape" Key to tirgger this function. Probably want something about returning to menu
     UnloadTexture(player.sprite);
 
     player.fuel = 100;

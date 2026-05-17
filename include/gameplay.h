@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef GAMEPLAY_H
 #define GAMEPLAY_H
 
@@ -5,14 +7,14 @@
 #include "raymath.h"
 #include "resource_dir.h"
 
-typedef struct Lander {
+typedef struct LANDER {
     Vector2 position; 
     Vector2 velocity;
     float rotation; 
     float throttle; 
     int fuel; 
     Texture sprite; 
-} Lander; 
+} LANDER; 
 
 // Declare Public Functions
 void initGameplay(void);
