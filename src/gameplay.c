@@ -6,8 +6,22 @@
 #define TROTTLE_RATE 5
 #define ROTATION_RATE 1.0f
 
+// Level Declarations
+// When I write the level editor, I will end up moving these somewhere else
+
+TERRAIN_LINE easy[] =
+{
+    {{0, 570}, {100, 570}}, {{100, 570}, {150, 520}},
+    {{150, 520}, {250, 200}}, {{250, 200}, {300, 480}},
+    {{300, 480}, {380, 480}}, {{300, 480}, {350, 510}},
+    {{350, 510}, {450, 560}}, {{450, 560}, {600, 530}},
+    {{600, 530}, {800, 530}}
+};
+LANDING_ZONE easyLZ = {{700, 525}, {600, 525}};
+
 static LANDER player = { 0 };
 
+int sizeOfTerrain = (sizeof(easy) / sizeof(easy[0]));
 
 void initGameplay(void) {
     SetWindowSize(800, 600);
@@ -95,6 +109,10 @@ void updateGameplay(void) {
     printf("Throttle: %f\n", player.throttle);
     printf("X Position: %f\n", player.position.x);
     printf("Y Position: %f\n", player.position.y);
+
+    if (collisionDetector(easy, easyLZ, player.position, sizeOfTerrain)) {
+        initGameplay();
+    }
 }
 void drawGameplay(void) {
     ClearBackground(BLACK);
@@ -104,6 +122,7 @@ void drawGameplay(void) {
     Vector2 origin = { (float)player.sprite.width / 2, (float)player.sprite.height / 2 };
 
     DrawTexturePro(player.sprite, source, dest, origin, player.rotation, WHITE);
+    drawLevel(easy, easyLZ, sizeOfTerrain);
 
     // Later to implement UI for this "scene"
 }

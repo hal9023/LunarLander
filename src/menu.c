@@ -17,7 +17,7 @@ void initMenu(void) { // Add Title text
     InitWindow(WINDOW_X, WINDOW_Y, "Main Menu");
     playButton.sprite = LoadTexture("playbutton.png");
     settingsButton.sprite = LoadTexture("settingsbutton.png");
-    quitButton.sprite = LoadTexture("quitbutton.png");
+    quitButton.sprite = LoadTexture("quitwbutton.png");
 
     playButton.frames = 3;
     settingsButton.frames = 3;

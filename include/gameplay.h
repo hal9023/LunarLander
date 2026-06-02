@@ -6,6 +6,7 @@
 #include "raylib.h"
 #include "raymath.h"
 #include "resource_dir.h"
+#include "level_handler.h"
 
 typedef struct LANDER {
     Vector2 position; 
